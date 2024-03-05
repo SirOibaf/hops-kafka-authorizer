@@ -182,6 +182,10 @@ public class HopsAclAuthorizer implements Authorizer {
 
     if (resourceType.equals(ResourceType.CLUSTER)) {
       LOGGER.info("This is cluster authorization for broker: " + principalName);
+      if (operation.equals(AclOperation.IDEMPOTENT_WRITE) && topicName.equals("kafka-cluster")) {
+        LOGGER.info("This is an impotent write, we should let it through");
+        return AuthorizationResult.ALLOWED;
+      }
       return AuthorizationResult.DENIED;
     }
 
